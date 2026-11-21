@@ -1,301 +1,339 @@
-# PizzeriaApp
+# 🍕 PizzeriaApp
 
-## 1. Descripción del proyecto
+**PizzeriaApp** es una aplicación Android desarrollada con **Kotlin y Jetpack Compose**, cuyo propósito es gestionar el registro de clientes y pedidos de una pizzería mediante una interfaz sencilla e interactiva.
 
-**PizzeriaApp** es una aplicación Android desarrollada en Kotlin mediante Android Studio y Jetpack Compose.
+El proyecto fue desarrollado como parte de las actividades académicas de la asignatura **Desarrollo de Aplicaciones Móviles I (PMY2201)**.
 
-El proyecto corresponde a la actividad formativa de la **Experiencia 2, Semana 4**, de la asignatura Desarrollo de Aplicaciones Móviles I (PMY2201), de Duoc UC.
+Su implementación permite aplicar conceptos de programación orientada a objetos, modularización con Gradle, gestión de estados y desarrollo de interfaces modernas para Android.
 
-Su objetivo es configurar un entorno de desarrollo Android funcional e integrar la lógica de negocio desarrollada durante las semanas anteriores en una aplicación móvil.
+## 1. Funcionalidades
 
-La aplicación permite procesar un pedido de demostración, verificar el inventario, calcular descuentos e impuestos, asignar un repartidor y generar una notificación y un reporte de pedidos.
+La aplicación incorpora las siguientes funcionalidades:
+
+### Gestión de clientes
+
+- Registro de clientes mediante un formulario.
+- Validación de nombres y apellidos.
+- Compatibilidad con caracteres Unicode, incluyendo tildes y la letra ñ.
+- Validación de números telefónicos móviles chilenos.
+- Validación del formato de correo electrónico.
+- Verificación de correos electrónicos duplicados.
+- Actualización automática del resumen de clientes.
+
+### Gestión de pedidos
+
+- Registro de pedidos asociados a clientes existentes.
+- Identificación del cliente mediante su correo electrónico.
+- Validación de cantidades ingresadas.
+- Creación automática de pedidos.
+- Verificación de disponibilidad de ingredientes.
+- Descuento de existencias al registrar pedidos válidos.
+- Rechazo de pedidos cuando el inventario es insuficiente.
+
+### Resumen dinámico
+
+La pantalla principal muestra:
+
+- Cantidad total de clientes registrados.
+- Cantidad total de pedidos realizados.
+- Nombre del último cliente registrado.
+
+La información se actualiza automáticamente después de cada operación exitosa.
+
+### Notificaciones y validaciones
+
+- Confirmaciones mediante componentes Snackbar de Material 3.
+- Desaparición automática de las confirmaciones después de 3,5 segundos.
+- Mensajes de error para entradas inválidas.
+- Teclados adaptados al tipo de información solicitada.
+
+---
 
 ## 2. Tecnologías utilizadas
 
-- **Lenguaje:** Kotlin 2.2.10.
-- **Entorno de desarrollo:** Android Studio.
-- **Interfaz gráfica:** Jetpack Compose y Material 3.
-- **Sistema de construcción:** Gradle 9.6 mediante Gradle Wrapper.
-- **Android Gradle Plugin:** 9.5.1.
-- **Configuración de Gradle:** Kotlin DSL.
-- **Android SDK de compilación:** API 37.
-- **Minimum SDK:** API 23 (Android 6.0).
-- **Java:** compatibilidad de código fuente y destino configurada en Java 11.
-- **Compatibilidad de bibliotecas:** Core Library Desugaring.
+| Tecnología | Aplicación en el proyecto |
+|---|---|
+| Kotlin | Lenguaje principal de programación. |
+| Android SDK | Desarrollo y ejecución de la aplicación Android. |
+| Jetpack Compose | Construcción declarativa de la interfaz gráfica. |
+| Material 3 | Componentes visuales y experiencia de usuario. |
+| ViewModel | Gestión del estado y coordinación de la lógica de presentación. |
+| LiveData | Observación y actualización dinámica del resumen. |
+| Kotlin Coroutines | Ejecución de temporizadores sin bloquear la interfaz. |
+| Gradle | Gestión de dependencias y configuración modular. |
+| Android Studio | Entorno de desarrollo y ejecución. |
 
-Para realizar las pruebas se utilizó un dispositivo virtual **Pixel 4 con Android API 37**.
+---
 
-## 3. Funcionalidades implementadas
+## 3. Arquitectura del proyecto
 
-### 3.1. Gestión de clientes y productos
+PizzeriaApp utiliza una estructura multimódulo organizada mediante Gradle.
 
-La aplicación utiliza clases Kotlin para representar clientes, usuarios, productos y combos.
+### Módulos principales
 
-Estas clases incorporan conceptos de programación orientada a objetos, como herencia, encapsulamiento y sobrescritura de métodos.
+**`app`**
 
-### 3.2. Procesamiento de pedidos
+Módulo principal de la aplicación Android.
 
-La clase `Pedido` permite:
+Contiene el punto de entrada de la aplicación y la configuración necesaria para su ejecución.
 
-- Asociar un cliente con los productos solicitados.
-- Calcular el subtotal del pedido.
-- Aplicar descuentos según la cantidad de productos.
-- Calcular descuentos promocionales.
-- Calcular impuestos.
-- Obtener el total del pedido.
-- Administrar el estado del pedido.
+**`ui`**
 
-### 3.3. Control de inventario
-
-Antes de confirmar un pedido, la aplicación verifica que existan suficientes ingredientes disponibles.
-
-Si el inventario es suficiente, descuenta los ingredientes utilizados y cambia el estado del pedido a **En preparación**.
-
-Si los ingredientes no son suficientes, el pedido no se confirma.
-
-### 3.4. Promociones y descuentos
-
-El proyecto incorpora dos descuentos:
-
-- **10 % por cantidad:** aplicable a pedidos confirmados de más de tres pizzas.
-- **5 % promocional:** aplicable a productos elegibles durante el período comprendido entre el 1 y el 30 de noviembre de 2026.
-
-La identificación de productos promocionables utiliza una anotación personalizada y Reflection.
-
-### 3.5. Asignación de repartidores
-
-La aplicación utiliza la clase `Repartidor` para seleccionar automáticamente al repartidor disponible más cercano.
-
-La demostración considera dos repartidores con distintas distancias.
-
-La asignación se realiza cuando el pedido se encuentra confirmado.
-
-### 3.6. Notificaciones simuladas
-
-El sistema genera un mensaje de notificación que informa al cliente sobre el estado de su pedido.
-
-**Importante:** esta funcionalidad es una simulación académica. No realiza envíos reales de mensajes SMS ni notificaciones externas.
-
-### 3.7. Reporte diario de pedidos
-
-La aplicación genera un reporte que contiene:
-
-- Identificador y fecha del pedido.
-- Información del cliente.
-- Productos y cantidades solicitadas.
-- Subtotal, descuentos, impuestos y total.
-- Estado del pedido.
-- Resumen de pedidos completados, pendientes y no confirmados.
-
-En la demostración actual, el reporte contiene el pedido procesado durante la ejecución.
-
-### 3.8. Interfaz Android
-
-La interfaz está desarrollada mediante Jetpack Compose.
+Módulo encargado de la interfaz y la lógica de presentación.
 
 Incluye:
 
-- Mensaje de bienvenida.
-- Botón **Procesar pedido**.
-- Visualización de resultados.
-- Desplazamiento vertical para consultar toda la información.
+- `PantallaPrincipal.kt`
+- `PizzeriaViewModel.kt`
 
-El mensaje de bienvenida solicitado para la actividad es:
+Utiliza Jetpack Compose, Material 3, ViewModel y LiveData.
 
-**Bienvenidos a la mejor pizzería de la ciudad**
+**`data`**
 
-## 4. Organización del proyecto
+Módulo responsable de la lógica de negocio y la gestión de datos en memoria.
 
-El código fuente principal se encuentra en:
+Incluye las clases del dominio, la gestión de clientes, los pedidos y las operaciones relacionadas con el inventario.
 
-`app/src/main/java/com/example/pizzeriaapp/`
+Entre sus componentes se encuentra:
 
-Su organización es la siguiente:
+- `RegistroPizzeria.kt`
+
+**`utils`**
+
+Módulo que centraliza funciones auxiliares reutilizables.
+
+Incluye:
+
+- `Validaciones.kt`
+
+Este archivo contiene las validaciones utilizadas durante el registro de clientes y pedidos.
+
+### Dependencias entre módulos
+
+La estructura principal de dependencias es:
 
 ```text
-com.example.pizzeriaapp/
-│
-├── MainActivity.kt
-│
-├── model/
-│   ├── Usuario.kt
-│   ├── Cliente.kt
-│   ├── Repartidor.kt
-│   ├── Producto.kt
-│   ├── Combo.kt
-│   ├── Pedido.kt
-│   └── Promocionable.kt
-│
-├── logic/
-│   ├── Inventario.kt
-│   ├── Promociones.kt
-│   ├── Reflexion.kt
-│   ├── DemostracionPedido.kt
-│   ├── Notificaciones.kt
-│   └── Reporte.kt
-│
-└── ui/
-    └── theme/
+app
+ |
+ v
+ ui
+ |
+ v
+data
+ |
+ v
+utils
 ```
 
-### Responsabilidades
+Actualmente, `app` también mantiene una dependencia directa con `data` para conservar compatibilidad con componentes de demostración desarrollados durante etapas anteriores.
 
-**model:** contiene las entidades y sus comportamientos relacionados con el negocio.
+La modularización permite distribuir responsabilidades y facilitar el mantenimiento y la evolución del proyecto.
 
-**logic:** contiene las funciones responsables del procesamiento de pedidos, inventario, promociones, repartidores, notificaciones y reportes.
+---
 
-**ui:** contiene los componentes de configuración visual de Jetpack Compose.
+## 4. Requisitos para ejecutar la aplicación
 
-**MainActivity.kt:** constituye el punto de entrada de la aplicación Android y conecta la interfaz con la lógica del proyecto.
+Para trabajar con el código fuente se necesita:
 
-## 5. Requisitos para ejecutar el proyecto
+- Android Studio.
+- Android SDK.
+- Un emulador Android o dispositivo físico compatible.
+- Conexión a Internet para descargar las dependencias durante la configuración inicial.
 
-Para abrir y ejecutar la aplicación se necesita:
+La aplicación tiene configurada una versión mínima de Android correspondiente a **API 23 (Android 6.0)**.
 
-1. Android Studio instalado.
-2. Android SDK configurado.
-3. Una plataforma Android compatible con la configuración del proyecto.
-4. Acceso a las dependencias necesarias para sincronizar Gradle.
-5. Un emulador Android o dispositivo físico compatible.
+---
 
-El proyecto incluye **Gradle Wrapper**, por lo que no es necesario instalar manualmente la versión de Gradle utilizada.
+## 5. Instalación y ejecución
 
-Se recomienda utilizar el JDK configurado por Android Studio para la ejecución de Gradle.
+### Paso 1. Obtener el proyecto
 
-## 6. Instrucciones de ejecución
+Clonar el repositorio:
 
-### Paso 1. Abrir el proyecto
+```bash
+git clone https://github.com/PanshoOw/pizzeria-app-android.git
+```
+
+También es posible descargar el proyecto como archivo ZIP desde GitHub.
+
+### Paso 2. Abrir en Android Studio
 
 1. Iniciar Android Studio.
 2. Seleccionar **Open**.
 3. Buscar la carpeta `PizzeriaApp`.
 4. Abrir el proyecto.
+5. Esperar a que Gradle sincronice las dependencias.
 
-### Paso 2. Sincronizar Gradle
+### Paso 3. Seleccionar un dispositivo
 
-Esperar a que Android Studio complete la sincronización del proyecto.
+Se puede utilizar un emulador Android configurado mediante el administrador de dispositivos de Android Studio o un dispositivo físico compatible.
 
-Si es necesario, utilizar la opción **Sync Project with Gradle Files**.
+Durante el desarrollo se realizaron pruebas utilizando un emulador Pixel 4.
 
-Comprobar que no existan errores de configuración.
+### Paso 4. Ejecutar
 
-### Paso 3. Configurar el dispositivo virtual
+Seleccionar el módulo `app` y presionar **Run**.
 
-1. Abrir **Tools → Device Manager**.
-2. Crear o seleccionar un dispositivo virtual.
-3. Utilizar una imagen de Android API 31 o superior.
-4. Iniciar el emulador.
+También es posible compilar la aplicación desde la terminal de Windows:
 
-Para las pruebas del proyecto se utilizó un **Pixel 4 con Android API 37**.
+```powershell
+.\gradlew.bat :app:assembleDebug
+```
 
-### Paso 4. Compilar el proyecto
+Una compilación correcta debería finalizar con el mensaje:
 
-Desde Android Studio, seleccionar:
+```text
+BUILD SUCCESSFUL
+```
 
-**Build → Make Project**
+---
 
-Comprobar que la compilación finalice correctamente.
+## 6. Guía de uso
 
-### Paso 5. Ejecutar la aplicación
+### 6.1. Registrar un cliente
 
-1. Seleccionar la configuración de ejecución `app`.
-2. Seleccionar el dispositivo virtual disponible.
-3. Presionar **Run**.
-4. Verificar que la aplicación se abra en el emulador.
+Al iniciar PizzeriaApp, se presenta una pantalla con el resumen de la pizzería y los formularios disponibles.
 
-### Paso 6. Probar las funcionalidades
+Para registrar un cliente:
 
-Al iniciar la aplicación, se mostrará el mensaje:
+1. Ubicar la sección **Registrar cliente**.
+2. Introducir el nombre completo.
+3. Ingresar un número telefónico móvil chileno.
+4. Escribir la dirección del cliente.
+5. Ingresar un correo electrónico válido.
+6. Presionar **Registrar cliente**.
 
-**Bienvenidos a la mejor pizzería de la ciudad**
+Si los datos son correctos, aparecerá una confirmación temporal.
 
-Debajo aparecerá el botón **Procesar pedido**.
+El resumen de la aplicación se actualizará automáticamente.
 
-Presionarlo para ejecutar la demostración.
+**Consideraciones:**
 
-La aplicación mostrará los resultados del procesamiento. Para visualizar todas las secciones, desplazarse verticalmente por la pantalla.
+- Se debe ingresar al menos un nombre y un apellido.
+- Se aceptan nombres con tildes y otros caracteres Unicode válidos.
+- Los números telefónicos deben cumplir con el formato móvil chileno admitido.
+- No se permite registrar dos clientes con el mismo correo electrónico, independientemente de las diferencias entre mayúsculas y minúsculas.
 
-## 7. Prueba funcional y resultados esperados
+### 6.2. Registrar un pedido
 
-La aplicación utiliza los siguientes datos de demostración:
+Para registrar un pedido:
 
-| Parámetro | Valor |
+1. Ubicar la sección **Registrar pedido**.
+2. Introducir el correo electrónico de un cliente registrado.
+3. Especificar la cantidad de pizzas solicitadas.
+4. Presionar **Registrar pedido**.
+
+El sistema comprobará:
+
+- Que el cliente exista.
+- Que la cantidad ingresada sea válida.
+- Que el pedido no supere el máximo permitido.
+- Que existan ingredientes suficientes para prepararlo.
+
+Si todas las comprobaciones son satisfactorias, el pedido será registrado y aparecerá una confirmación temporal.
+
+El contador de pedidos aumentará automáticamente.
+
+**Importante:** en esta versión, los pedidos se generan utilizando un producto de pizza predefinido. Todavía no existe un catálogo interactivo para seleccionar distintos productos.
+
+### 6.3. Consultar el resumen
+
+La sección **Resumen de la pizzería** muestra información actualizada sobre los registros realizados durante la sesión.
+
+No es necesario actualizar manualmente la pantalla para consultar los nuevos valores.
+
+### 6.4. Interpretar los mensajes
+
+La aplicación utiliza dos tipos de mensajes:
+
+**Confirmaciones**
+
+Indican que una operación se completó correctamente.
+
+Se muestran mediante un Snackbar y desaparecen automáticamente después de 3,5 segundos.
+
+**Errores**
+
+Informan sobre datos incorrectos o situaciones que impiden completar una operación.
+
+Permanecen visibles junto al formulario correspondiente para facilitar su corrección.
+
+---
+
+## 7. Validaciones implementadas
+
+| Campo u operación | Validación |
 |---|---|
-| Cliente | Cliente de prueba |
-| Producto | Pepperoni con bordes de queso |
-| Precio unitario | $10.000 CLP |
-| Cantidad | 4 pizzas |
-| Fecha | 15-11-2026 |
-| Repartidores disponibles | Carlos González y Pedro Ramírez |
+| Nombre completo | Obligatorio, mínimo dos palabras y caracteres permitidos. |
+| Teléfono | Formato de número móvil chileno. |
+| Dirección | Campo obligatorio. |
+| Correo electrónico | Formato válido y ausencia de duplicados. |
+| Cliente del pedido | Debe existir previamente. |
+| Cantidad de pizzas | Debe ser un número entero mayor que cero. |
+| Límite por pedido | Máximo de 10 pizzas. |
+| Inventario | Disponibilidad suficiente de ingredientes. |
 
-### Resultado esperado del pedido
+Las validaciones permiten prevenir registros incorrectos y mantener la coherencia de las operaciones realizadas.
 
-| Concepto | Valor |
-|---|---:|
-| Subtotal | $40.000 |
-| Descuento por cantidad (10 %) | -$4.000 |
-| Descuento promocional (5 %) | -$1.800 |
-| Base imponible | $34.200 |
-| Impuestos (19 %) | $6.498 |
-| **Total del pedido** | **$40.698** |
+---
 
-El pedido debe quedar en estado **En preparación**, siempre que exista inventario suficiente.
+## 8. Limitaciones actuales
 
-### Resultado esperado de la asignación
+PizzeriaApp es un proyecto académico en desarrollo.
 
-El sistema debe seleccionar a **Carlos González**, ya que se encuentra a 2 km y está disponible.
+Por esta razón, existen funcionalidades que todavía no se encuentran implementadas:
 
-### Resultado esperado de la notificación
+- Persistencia permanente de clientes y pedidos.
+- Conexión con una base de datos.
+- Autenticación de usuarios.
+- Selección interactiva de diferentes pizzas.
+- Procesamiento de pagos.
+- Seguimiento real de entregas.
+- Sincronización con servicios externos.
 
-Debe mostrarse un mensaje simulado que informe al cliente sobre el estado de su pedido.
+**Los datos y el inventario se mantienen en memoria durante la ejecución del proceso de la aplicación.**
 
-### Resultado esperado del reporte
+Si el proceso de la aplicación finaliza, los registros realizados pueden perderse y el inventario vuelve a su estado inicial cuando se crea una nueva instancia del sistema de registro.
 
-El reporte diario debe mostrar:
+---
 
-- Total de pedidos: 1.
-- Pedidos completados: 0.
-- Pedidos pendientes: 1.
-- Pedidos no confirmados: 0.
+## 9. Posibles mejoras futuras
 
-Estos resultados corresponden al escenario de demostración implementado.
+Entre las posibles extensiones del proyecto se encuentran:
 
-## 8. Consideraciones técnicas
+- Incorporar persistencia local mediante Room.
+- Implementar operaciones de consulta mediante Coroutines.
+- Permitir seleccionar diferentes productos.
+- Incorporar un carrito de compras.
+- Mostrar el historial de pedidos.
+- Permitir consultar el inventario disponible.
+- Implementar pruebas automatizadas.
+- Mejorar la navegación entre pantallas.
 
-La aplicación reutiliza parte de la lógica desarrollada anteriormente en un proyecto Kotlin de consola.
+Estas funcionalidades no forman parte de la versión actual.
 
-Para su integración con Android, las funcionalidades de presentación de información fueron adaptadas para devolver cadenas de texto que pueden visualizarse mediante Jetpack Compose.
+---
 
-Se utiliza Core Library Desugaring para permitir el uso de determinadas API modernas de Java, como `LocalDate`, manteniendo la compatibilidad con el SDK mínimo configurado.
+## 10. Propósito académico
 
-Los datos de demostración se crean durante la ejecución de la función `procesarPedidoEjemplo()`.
+El proyecto permite demostrar conocimientos relacionados con:
 
-El inventario se inicializa nuevamente cada vez que se procesa el ejemplo.
+- Programación orientada a objetos en Kotlin.
+- Desarrollo de aplicaciones Android.
+- Arquitectura modular mediante Gradle.
+- Separación de responsabilidades.
+- Desarrollo de interfaces con Jetpack Compose.
+- Gestión del estado con ViewModel.
+- Observación de datos mediante LiveData.
+- Programación asíncrona con Kotlin Coroutines.
+- Validación de datos y control básico de operaciones.
 
-La aplicación no utiliza actualmente:
+---
 
-- Base de datos.
-- Almacenamiento persistente de pedidos.
-- Integración con servicios externos.
-- Envío real de notificaciones.
-- Registro de pedidos mediante formularios de usuario.
+## 11. Repositorio
 
-Estas características quedan fuera del alcance de la demostración académica actual.
+Código fuente disponible en:
 
-## 9. Evidencias de funcionamiento
+**https://github.com/PanshoOw/pizzeria-app-android**
 
-La entrega incorpora capturas de pantalla destinadas a demostrar:
-
-1. **Instalación de Android Studio:** entorno de desarrollo correctamente instalado.
-2. **Configuración del AVD:** dispositivo virtual Android funcionando.
-3. **Ejecución de PizzeriaApp:** aplicación ejecutándose en el emulador, con el mensaje de bienvenida solicitado.
-
-Estas evidencias permiten verificar la configuración del entorno y el funcionamiento de la aplicación.
-
-## 10. Conclusión
-
-PizzeriaApp demuestra la configuración de un entorno de desarrollo Android y la integración de funcionalidades Kotlin previamente desarrolladas.
-
-Mediante Jetpack Compose, las operaciones del sistema de pedidos pueden ejecutarse y visualizarse desde una aplicación móvil.
-
-El proyecto aplica principios de programación orientada a objetos, reutilización de código y separación de responsabilidades, constituyendo una base para futuras ampliaciones.
+Proyecto desarrollado con fines educativos.

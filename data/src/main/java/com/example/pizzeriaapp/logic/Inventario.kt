@@ -1,6 +1,7 @@
 package com.example.pizzeriaapp.logic
 
 import com.example.pizzeriaapp.model.Pedido
+import kotlin.collections.iterator
 
 fun verificarYActualizarInventario(
     pedido: Pedido,

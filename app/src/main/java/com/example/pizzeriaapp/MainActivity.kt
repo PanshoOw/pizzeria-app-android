@@ -25,6 +25,7 @@ import com.example.pizzeriaapp.logic.procesarPedidoEjemplo
 
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.example.pizzeriaapp.ui.PantallaPrincipal
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PizzeriaAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Bienvenidos a la mejor pizzería de la ciudad",
+                    PantallaPrincipal(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
